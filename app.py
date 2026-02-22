@@ -11,7 +11,7 @@ def login():
     if request.method == "POST":
         username = request.form.get("username", "").strip()
         password = request.form.get("password", "").strip()
-        if username == APP_USERNAME and password == APP_PASSWORD:
+        if username.lower() == APP_USERNAME.lower() and password.lower() == APP_PASSWORD.lower():
             session["logged_in"] = True
             session["username"] = username
             next_url = request.args.get("next", "/")
