@@ -1,265 +1,317 @@
-# How to Set Up Your AI Assistant (Mikalina / OpenClaw)
-*Step-by-step recreation guide*
+# How to Build Your AI Assistant — VPS Terminal Only
+*Everything done from the command line. No GUI required.*
 
 ---
 
 ## What You're Building
 
 A personal AI assistant that:
-- Runs 24/7 on a cloud server (VPS)
-- Is powered by Anthropic's Claude AI model
-- You talk to it via **WhatsApp** (or any other messaging app)
-- It can write and deploy code to the internet via GitHub + Render
-- It remembers context between conversations
+- Runs 24/7 on a cloud server
+- You talk to it via **WhatsApp**
+- It can write and deploy live web apps via GitHub + Render
+- It remembers context between sessions
 
 ---
 
-## What You Need (Accounts to Create First)
+## Before You Start — Accounts to Create (on your laptop/phone)
 
-Before starting, create free/paid accounts at:
+Create these accounts first before touching the terminal:
 
-1. **A VPS provider** — [Hetzner](https://hetzner.com) (cheapest, recommended), DigitalOcean, or Linode
-   - Plan: ~$4–6/month for a basic server is plenty
-   - OS: **Ubuntu 24.04 LTS**
-
-2. **Anthropic** — https://console.anthropic.com
-   - Sign up and add a payment method
-   - You'll create an API key here
-
-3. **OpenClaw** — https://openclaw.ai
-   - The software that runs the assistant and connects everything together
-
-4. **GitHub** — https://github.com
-   - For storing and deploying code
-
-5. **Render** — https://render.com
-   - For hosting live web apps (free tier available)
-
-6. **WhatsApp Business** — https://business.whatsapp.com
-   - You need a phone number NOT already on WhatsApp
-   - A cheap SIM card or Google Voice number works fine
+| Account | URL | What you need from it |
+|---|---|---|
+| Hetzner (VPS host) | https://hetzner.com | Server IP address |
+| Anthropic | https://console.anthropic.com | API key (sk-ant-...) |
+| OpenClaw | https://openclaw.ai | License / account |
+| GitHub | https://github.com | Personal access token |
+| Render | https://render.com | API key (rnd_...) |
+| WhatsApp | On your phone | A spare phone number not already on WhatsApp |
 
 ---
 
-## Step 1: Create Your VPS
+## PART 1: Create Your VPS on Hetzner
 
-1. Log into Hetzner (or your provider of choice)
-2. Create a new server:
-   - **Location:** Any (pick closest to you)
-   - **OS:** Ubuntu 24.04
-   - **Plan:** CPX11 or CX22 (~$4–6/month) — 2 vCPU, 2–4GB RAM
-3. Add your SSH key (or use a password)
-4. Once created, note your server's **IP address**
+1. Log into https://hetzner.com → Cloud Console
+2. Click **New Project** → name it anything
+3. Click **Add Server**:
+   - **Location:** Any (pick nearest to you)
+   - **Image:** Ubuntu 24.04
+   - **Type:** Shared CPU → **CX22** (~$4/month, 2 vCPU, 4GB RAM)
+   - **SSH Keys:** Add your public key (recommended) OR use root password
+4. Click **Create & Buy**
+5. Wait ~30 seconds → copy your server's **Public IP address**
 
 ---
 
-## Step 2: Connect to Your Server
+## PART 2: Connect to Your VPS
 
-Open Terminal (Mac) or PowerShell (Windows) and run:
-
+**On Mac/Linux** — open Terminal and run:
 ```bash
 ssh root@YOUR_SERVER_IP
 ```
 
+**On Windows** — use PowerShell or install [PuTTY](https://putty.org):
+```
+ssh root@YOUR_SERVER_IP
+```
+
+Type `yes` when asked about the fingerprint. You're now inside your server.
+
 ---
 
-## Step 3: Install OpenClaw
+## PART 3: Update the Server
 
-Once connected to your server, run these commands one at a time:
+Run these commands to make sure everything is up to date:
 
 ```bash
-# Update the system
 apt update && apt upgrade -y
+```
 
-# Install Node.js (v22+)
+Wait for it to finish (1–2 minutes).
+
+---
+
+## PART 4: Install Node.js
+
+OpenClaw requires Node.js version 20 or higher.
+
+```bash
+# Add the Node.js 22 repo
 curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+
+# Install Node.js
 apt install -y nodejs
 
+# Verify it installed correctly
+node --version
+npm --version
+```
+
+You should see something like `v22.x.x` — that's correct.
+
+---
+
+## PART 5: Install OpenClaw
+
+```bash
 # Install OpenClaw globally
 npm install -g openclaw
 
-# Verify it installed
+# Verify
 openclaw --version
 ```
 
 ---
 
-## Step 4: Get Your Anthropic API Key
-
-1. Go to https://console.anthropic.com
-2. Click **API Keys** → **Create Key**
-3. Copy the key (starts with `sk-ant-...`)
-4. Keep this secret — it's your AI brain
-
----
-
-## Step 5: Configure OpenClaw
-
-Run the OpenClaw setup wizard:
+## PART 6: Configure OpenClaw with Your API Key
 
 ```bash
 openclaw configure
 ```
 
-It will ask you:
-- **Anthropic API key** → paste your `sk-ant-...` key
-- **Model** → type `claude-sonnet-4-6` (or the latest Claude Sonnet)
-- **Workspace** → press Enter for default (`~/.openclaw/workspace`)
+The wizard will ask:
+- **Anthropic API key** → paste your `sk-ant-...` key, press Enter
+- **Default model** → type `anthropic/claude-sonnet-4-6`, press Enter
+- **Workspace directory** → press Enter to accept default
 
 ---
 
-## Step 6: Start the Gateway
+## PART 7: Authorize Your Phone Number
+
+This tells the assistant which WhatsApp number is allowed to talk to it:
 
 ```bash
-# Start OpenClaw as a background service
-openclaw gateway start
-
-# Check it's running
-openclaw gateway status
+openclaw configure --section auth
 ```
+
+Enter your phone number in international format (e.g. `+16202108235`).
 
 ---
 
-## Step 7: Connect WhatsApp
+## PART 8: Connect WhatsApp
 
-This uses **WhatsApp linking** (like WhatsApp Web — no Business API needed):
+This works exactly like WhatsApp Web — scan a QR code with your phone:
 
 ```bash
 openclaw configure --section whatsapp
 ```
 
-1. It will display a **QR code** in the terminal
-2. On your phone, open WhatsApp → **Linked Devices** → **Link a Device**
-3. Scan the QR code
-4. Done — WhatsApp is now connected
+A QR code will appear in the terminal.
 
-> **Note:** The phone number you use here becomes your assistant's WhatsApp number.
-> Using a second/separate number (not your personal one) is recommended.
-> A cheap prepaid SIM or a Google Voice number works.
+On your phone:
+1. Open WhatsApp
+2. Tap the **three dots** (top right) → **Linked Devices**
+3. Tap **Link a Device**
+4. Point camera at the QR code in your terminal
+5. Done ✅
+
+> **Tip:** If the QR code looks garbled, make your terminal font smaller
+> so the whole code fits on screen. Or zoom out with Ctrl+- (minus).
 
 ---
 
-## Step 8: Make It Persist (Survive Reboots)
-
-So the assistant keeps running even if the server restarts:
+## PART 9: Start the Gateway
 
 ```bash
-# Create a systemd service
+openclaw gateway start
+```
+
+To check it's running:
+```bash
+openclaw gateway status
+```
+
+You should see `running` or `active`. Send yourself a WhatsApp message to test — the assistant should respond.
+
+---
+
+## PART 10: Make It Run Forever (Survive Reboots)
+
+Without this step, the assistant stops if the server restarts.
+
+```bash
+# Install as a system service
 openclaw gateway install-service
 
-# Enable it to start on boot
+# Enable it to start automatically on boot
 systemctl enable openclaw
+
+# Start it now
 systemctl start openclaw
 
-# Check it's running
+# Confirm it's running
 systemctl status openclaw
 ```
 
+You should see `Active: active (running)` in green.
+
 ---
 
-## Step 9: Connect GitHub
+## PART 11: Personalize Your Assistant
 
-1. Go to https://github.com/settings/tokens
+Now switch to WhatsApp and send these messages to your assistant:
+
+```
+Your name is [PICK A NAME]
+My name is [YOUR NAME]
+```
+
+Then send your GitHub and Render tokens (see below how to get them):
+
+```
+Here's my GitHub token: ghp_xxxxxxxxxxxxxxxxx
+Here's my Render API key: rnd_xxxxxxxxxxxxxxxxx
+```
+
+The assistant will save everything and remember it.
+
+---
+
+## PART 12: Get Your GitHub Token (on your laptop browser)
+
+1. Log into GitHub → go to:
+   **https://github.com/settings/tokens**
 2. Click **Generate new token (classic)**
-3. Give it a name (e.g. "Mikalina Assistant")
-4. Select scopes: **repo** (full control of private repos)
-5. Click **Generate token** — copy it immediately
-
-Send the token to your assistant via WhatsApp:
-> "Here's my GitHub token: ghp_xxxxxxxxxxxxx"
-
----
-
-## Step 10: Connect Render
-
-1. Go to https://render.com → sign in
-2. Go to **Account Settings** → **API Keys** → **Create API Key**
-3. Copy the key (starts with `rnd_...`)
-
-Send it to your assistant via WhatsApp:
-> "Here's my Render API key: rnd_xxxxxxxxxxxxx"
+3. Name: `AI Assistant`
+4. Expiration: `No expiration`
+5. Check the box for **repo** (full control of private repos)
+6. Scroll down → **Generate token**
+7. Copy the token immediately (starts with `ghp_...`)
+8. Send it to your assistant via WhatsApp
 
 ---
 
-## Step 11: Personalize Your Assistant
+## PART 13: Get Your Render API Key (on your laptop browser)
 
-Send messages to your assistant to set it up:
-- **"Your name is [NAME]"**
-- **"My name is [YOUR NAME]"**
-- **"My email is [your@email.com]"**
-- **"Here's my GitHub token: ..."**
-- **"Here's my Render API key: ..."**
-
-The assistant saves all of this and remembers it going forward.
+1. Log into Render → go to:
+   **https://dashboard.render.com/u/settings/api-keys**
+2. Click **Create API Key**
+3. Name: `AI Assistant`
+4. Copy the key (starts with `rnd_...`)
+5. Send it to your assistant via WhatsApp
 
 ---
 
-## How It All Works Together
+## PART 14: Test Everything
 
+In WhatsApp, ask your assistant:
 ```
-You (WhatsApp)
-      ↓
-OpenClaw Gateway (running on your VPS)
-      ↓
-Claude AI (Anthropic) — the brain
-      ↓
-GitHub — stores all code
-      ↓
-Render — hosts the live web apps
+Can you create a test GitHub repo called "hello-world" for me?
 ```
 
-- You chat via **WhatsApp**
-- The assistant uses **Claude** to think and respond
-- When you want a web app built, the assistant writes the code,
-  pushes it to **GitHub**, and deploys it to **Render**
-- You get a live URL within minutes
+If it creates the repo, everything is wired up correctly. 🎉
 
 ---
 
-## Cost Summary
+## Useful Terminal Commands (for later)
 
-| Service | Cost |
-|---|---|
-| VPS (Hetzner CX22) | ~$5/month |
-| Anthropic API (Claude) | ~$5–20/month depending on usage |
-| Render (free tier) | $0 |
-| GitHub | $0 |
-| WhatsApp | $0 (uses your existing app) |
-| **Total** | **~$10–25/month** |
+```bash
+# Check if the assistant is running
+systemctl status openclaw
+
+# Restart it
+systemctl restart openclaw
+
+# View live logs
+openclaw gateway logs
+# (press Ctrl+C to stop watching)
+
+# Stop it
+systemctl stop openclaw
+
+# Update OpenClaw to latest version
+npm update -g openclaw
+```
 
 ---
 
 ## Troubleshooting
 
-**WhatsApp disconnects:**
-```bash
-openclaw gateway restart
-# Then re-scan the QR code
-```
-
-**Check logs:**
-```bash
-openclaw gateway logs
-# or
-journalctl -u openclaw -f
-```
-
-**Restart everything:**
+**WhatsApp disconnected / not responding:**
 ```bash
 systemctl restart openclaw
+# Then re-scan the WhatsApp QR code:
+openclaw configure --section whatsapp
+```
+
+**"Command not found" errors:**
+```bash
+# Make sure Node is installed
+node --version
+# Re-install OpenClaw if needed
+npm install -g openclaw
+```
+
+**Server ran out of memory:**
+```bash
+# Check usage
+free -h
+# Upgrade your Hetzner plan if needed (CX32 is next step up)
 ```
 
 ---
 
-## Security Tips
+## Cost Summary
 
-- Don't share your API keys publicly
-- Use a dedicated phone number for the assistant, not your personal one
-- The assistant only responds to phone numbers you authorize (configured in OpenClaw)
-- Keep your VPS updated: `apt update && apt upgrade -y`
+| Item | Cost |
+|---|---|
+| Hetzner CX22 VPS | ~$5/month |
+| Anthropic API (Claude) | ~$5–20/month (depends on usage) |
+| Render | Free tier = $0 |
+| GitHub | Free = $0 |
+| Extra phone number (optional) | ~$1–3/month or one-time SIM |
+| **Total** | **~$10–25/month** |
 
 ---
 
-*Document created: February 2026*
-*Setup created by: Caroline Novak*
-*Assistant: Mikalina (OpenClaw + Claude Sonnet)*
+## Architecture Summary
+
+```
+You → WhatsApp → OpenClaw Gateway (on VPS) → Claude AI (Anthropic)
+                        ↓
+              GitHub (code storage) + Render (live web apps)
+```
+
+---
+
+*Guide created: February 2026*
+*For: Caroline Novak / VTC Assistant Project*
