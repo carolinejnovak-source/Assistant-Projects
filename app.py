@@ -37,7 +37,12 @@ def index():
             "description": "Population density, income, insurance coverage, CPT 36475 volume, and Fair Health benchmarks for all clinic locations.",
             "status": "live",
         },
-        # Add more projects here as they are created
+        {
+            "name": "VIP Lease Review",
+            "url": "https://lease-review.onrender.com",
+            "description": "Upload a lease and get a full 60-point review against VIP Medical Group standards — plus a redlined Word document with tracked changes ready for your attorney.",
+            "status": "live",
+        },
     ]
     return render_template("index.html", projects=projects)
 
