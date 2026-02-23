@@ -43,6 +43,12 @@ def index():
             "description": "Upload a lease and get a full 60-point review against VIP Medical Group standards — plus a redlined Word document with tracked changes ready for your attorney.",
             "status": "live",
         },
+        {
+            "name": "Scheduling",
+            "url": "https://scheduling-wwjm.onrender.com",
+            "description": "Calendly-style booking page for Dr. Caroline Novak — share a link, let people pick a 30-min slot, and auto-generate Google Meet invites.",
+            "status": "live",
+        },
     ]
     return render_template("index.html", projects=projects)
 
