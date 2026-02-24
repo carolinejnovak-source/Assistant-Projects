@@ -49,6 +49,12 @@ def index():
             "description": "Calendly-style booking page for Dr. Caroline Novak — share a link, let people pick a 30-min slot, and auto-generate Google Meet invites.",
             "status": "live",
         },
+        {
+            "name": "Compliance Orchestrator",
+            "url": "https://compliance-orchestrator.onrender.com",
+            "description": "Compliance workflow management and orchestration tool.",
+            "status": "live",
+        },
     ]
     return render_template("index.html", projects=projects)
 
