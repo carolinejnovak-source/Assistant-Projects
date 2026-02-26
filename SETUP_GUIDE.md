@@ -239,10 +239,16 @@ Your assistant will remember this going forward.
 
 **Step 2 — Save it on your VPS** (in your terminal):
 ```bash
-openclaw configure
+nano ~/.openclaw/workspace/credentials.md
 ```
-If asked **"Where will the Gateway run?"** → select **Local (this machine)**.
-Arrow down to **Web tools** (or the GitHub section) → paste your token when prompted.
+
+Add a line like:
+```
+## GitHub
+Token: ghp_xxxxxxxxxxxxxxxxx
+```
+
+Press **Ctrl+X → Y → Enter** to save.
 
 > ⚠️ Never paste API keys or tokens into WhatsApp or any chat app. Always enter them directly in the terminal.
 
@@ -258,9 +264,16 @@ Arrow down to **Web tools** (or the GitHub section) → paste your token when pr
 
 **Step 2 — Save it on your VPS** (in your terminal):
 ```bash
-openclaw configure
+nano ~/.openclaw/workspace/credentials.md
 ```
-Navigate to the relevant section and paste your Render key when prompted.
+
+Add a line like:
+```
+## Render
+API Key: rnd_xxxxxxxxxxxxxxxxx
+```
+
+Press **Ctrl+X → Y → Enter** to save.
 
 > ⚠️ Same rule — terminal only, never via chat.
 
