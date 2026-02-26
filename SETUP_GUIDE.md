@@ -25,7 +25,7 @@ Create these accounts first before touching the terminal:
 | Render | https://render.com | API key (rnd_...) |
 | WhatsApp | On your phone | A spare phone number not already on WhatsApp |
 
-> **Important — Anthropic billing:** New accounts start on Tier 1 with a 30,000 token/minute limit. Add at least $5 of credit at [console.anthropic.com/settings/billing](https://console.anthropic.com/settings/billing) to unlock higher rate limits. Otherwise your assistant may hit errors when first starting up.
+> **Important — Anthropic billing:** New accounts start on Tier 1 with a 30,000 token/minute limit. You **must** add at least $5 of credit at [console.anthropic.com/settings/billing](https://console.anthropic.com/settings/billing) before using your bot, or you'll immediately see "API rate limit reached" errors. This is the #1 issue new users hit.
 
 ---
 
