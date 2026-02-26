@@ -185,17 +185,22 @@ Open a second SSH session (or a new PowerShell window and SSH in again) and run:
 # Install as a system service
 openclaw gateway install-service
 
+# Reload systemd so it sees the new service file
+systemctl daemon-reload
+
 # Enable it to start automatically on boot
-systemctl enable openclaw
+systemctl enable openclaw-gateway
 
 # Start it now
-systemctl start openclaw
+systemctl start openclaw-gateway
 
 # Confirm it's running
-systemctl status openclaw
+systemctl status openclaw-gateway
 ```
 
 You should see **`Active: active (running)`** in green.
+
+> **Note:** The service is registered as `openclaw-gateway`, not `openclaw`. Always use `openclaw-gateway` with systemctl commands.
 
 ---
 
@@ -257,17 +262,17 @@ If it creates the repo, everything is wired up correctly. 🎉
 
 ```bash
 # Check if the assistant is running
-systemctl status openclaw
+systemctl status openclaw-gateway
 
 # Restart it
-systemctl restart openclaw
+systemctl restart openclaw-gateway
 
 # View live logs
 openclaw gateway logs
 # (press Ctrl+C to stop watching)
 
 # Stop it
-systemctl stop openclaw
+systemctl stop openclaw-gateway
 
 # Update OpenClaw to latest version
 npm update -g openclaw
