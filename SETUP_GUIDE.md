@@ -188,17 +188,23 @@ openclaw gateway install-service
 # Reload systemd so it sees the new service file
 systemctl daemon-reload
 
-# Enable it to start automatically on boot
+# Try system-level first:
 systemctl enable openclaw-gateway
-
-# Start it now
 systemctl start openclaw-gateway
-
-# Confirm it's running
 systemctl status openclaw-gateway
 ```
 
-You should see **`Active: active (running)`** in green.
+If you see **`Unit openclaw-gateway.service not found`**, the service was installed at user level instead. Run these instead:
+
+```bash
+systemctl --user daemon-reload
+systemctl --user enable openclaw-gateway
+systemctl --user start openclaw-gateway
+loginctl enable-linger root
+systemctl --user status openclaw-gateway
+```
+
+You should see **`Active: active (running)`** in green either way.
 
 > **Note:** The service is registered as `openclaw-gateway`, not `openclaw`. Always use `openclaw-gateway` with systemctl commands.
 
