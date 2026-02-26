@@ -206,44 +206,55 @@ You should see **`Active: active (running)`** in green.
 
 ## PART 11: Personalize Your Assistant
 
-Now switch to WhatsApp and send messages to your assistant:
+Switch to WhatsApp and introduce yourself:
 
 ```
 Your name is [PICK A NAME]
 My name is [YOUR NAME]
 ```
 
-Then send your GitHub and Render tokens (see Parts 12 & 13 for how to get them):
+Your assistant will remember this going forward.
 
-```
-Here's my GitHub token: ghp_xxxxxxxxxxxxxxxxx
-Here's my Render API key: rnd_xxxxxxxxxxxxxxxxx
-```
-
-The assistant will save everything securely and remember it going forward.
+> **Security note:** Never send API keys or tokens over WhatsApp (or any chat). Always paste credentials directly into the terminal. See Parts 12 & 13 for how to add your GitHub and Render keys securely via the terminal.
 
 ---
 
-## PART 12: Get Your GitHub Token (on your laptop browser)
+## PART 12: Add Your GitHub Token
 
+**Step 1 — Get the token** (in your browser):
 1. Log into GitHub → go to: **https://github.com/settings/tokens**
 2. Click **Generate new token (classic)**
 3. Name: `AI Assistant`
 4. Expiration: `No expiration`
 5. Check **repo** (full control of private repos)
 6. Scroll down → **Generate token**
-7. Copy the token immediately (starts with `ghp_...`)
-8. Send it to your assistant via WhatsApp
+7. Copy the token (starts with `ghp_...`)
+
+**Step 2 — Save it on your VPS** (in your terminal):
+```bash
+openclaw configure
+```
+Arrow down to **Web tools** (or the GitHub section) → paste your token when prompted.
+
+> ⚠️ Never paste API keys or tokens into WhatsApp or any chat app. Always enter them directly in the terminal.
 
 ---
 
-## PART 13: Get Your Render API Key (on your laptop browser)
+## PART 13: Add Your Render API Key
 
+**Step 1 — Get the key** (in your browser):
 1. Log into Render → go to: **https://dashboard.render.com/u/settings/api-keys**
 2. Click **Create API Key**
 3. Name: `AI Assistant`
 4. Copy the key (starts with `rnd_...`)
-5. Send it to your assistant via WhatsApp
+
+**Step 2 — Save it on your VPS** (in your terminal):
+```bash
+openclaw configure
+```
+Navigate to the relevant section and paste your Render key when prompted.
+
+> ⚠️ Same rule — terminal only, never via chat.
 
 ---
 
