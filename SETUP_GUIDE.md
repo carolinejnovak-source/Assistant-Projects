@@ -114,10 +114,11 @@ openclaw onboard
 ```
 
 The wizard walks you through:
-1. Entering your **Anthropic API key** (`sk-ant-...`)
-2. Choosing a default model (accept the default)
-3. Setting your workspace directory (press Enter to accept default)
-4. A gateway token is generated and saved automatically
+1. If asked **"Where will the Gateway run?"** → select **Local (this machine)**
+2. Entering your **Anthropic API key** (`sk-ant-...`) — paste directly, never via chat
+3. Choosing a default model (accept the default)
+4. Setting your workspace directory (press Enter to accept default)
+5. A gateway token is generated and saved automatically
 
 When asked **"How do you want to hatch your bot?"** — select **Hatch in TUI (recommended)** and press Enter.
 
@@ -240,6 +241,7 @@ Your assistant will remember this going forward.
 ```bash
 openclaw configure
 ```
+If asked **"Where will the Gateway run?"** → select **Local (this machine)**.
 Arrow down to **Web tools** (or the GitHub section) → paste your token when prompted.
 
 > ⚠️ Never paste API keys or tokens into WhatsApp or any chat app. Always enter them directly in the terminal.
