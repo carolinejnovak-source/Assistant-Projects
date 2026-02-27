@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Assistant Setup Guide</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+  <style>
+    body { background: #f8fafc; font-family: 'Inter', system-ui, sans-serif; color: #1e293b; }
+
+    .topbar {
+      background: #0f172a;
+      color: #f8fafc;
+      padding: .75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .topbar .title { font-weight: 700; font-size: 1rem; letter-spacing: -.01em; }
+    .topbar .actions { display: flex; gap: .6rem; align-items: center; }
+    .btn-ghost { background: transparent; border: 1px solid rgba(255,255,255,.25); color: #e2e8f0; border-radius: 7px; font-size: .82rem; padding: .35rem .85rem; text-decoration: none; }
+    .btn-ghost:hover { background: rgba(255,255,255,.1); color: #fff; }
+    .btn-pdf { background: #2563eb; border: none; color: #fff; border-radius: 7px; font-size: .82rem; font-weight: 600; padding: .35rem .85rem; text-decoration: none; }
+    .btn-pdf:hover { background: #1d4ed8; color: #fff; }
+
+    .guide-container { max-width: 860px; margin: 2.5rem auto; background: #fff; border-radius: 16px; box-shadow: 0 2px 16px rgba(0,0,0,.07); padding: 2.5rem 3rem; }
+
+    /* Markdown styles */
+    .guide-body h1 { font-size: 1.75rem; font-weight: 800; color: #0f172a; margin-top: 0; }
+    .guide-body h2 { font-size: 1.3rem; font-weight: 700; color: #1e40af; margin-top: 2rem; border-bottom: 2px solid #e2e8f0; padding-bottom: .4rem; }
+    .guide-body h3 { font-size: 1.05rem; font-weight: 700; color: #334155; margin-top: 1.5rem; }
+    .guide-body h4 { font-size: .95rem; font-weight: 700; color: #475569; margin-top: 1rem; }
+    .guide-body p { line-height: 1.75; color: #334155; }
+    .guide-body ul, .guide-body ol { line-height: 1.8; color: #334155; padding-left: 1.5rem; }
+    .guide-body li { margin-bottom: .25rem; }
+    .guide-body code { background: #f1f5f9; color: #be185d; padding: .15em .4em; border-radius: 4px; font-size: .88em; font-family: 'JetBrains Mono', 'Fira Code', monospace; }
+    .guide-body pre { background: #1e293b; color: #e2e8f0; border-radius: 10px; padding: 1.25rem; overflow-x: auto; margin: 1rem 0; }
+    .guide-body pre code { background: transparent; color: inherit; padding: 0; font-size: .87rem; }
+    .guide-body blockquote { border-left: 4px solid #3b82f6; background: #eff6ff; margin: 1rem 0; padding: .75rem 1rem; border-radius: 0 8px 8px 0; color: #1e40af; font-style: italic; }
+    .guide-body a { color: #2563eb; }
+    .guide-body table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: .9rem; }
+    .guide-body th { background: #f1f5f9; font-weight: 700; color: #0f172a; padding: .6rem .9rem; border: 1px solid #e2e8f0; text-align: left; }
+    .guide-body td { padding: .5rem .9rem; border: 1px solid #e2e8f0; }
+    .guide-body tr:nth-child(even) td { background: #f8fafc; }
+    .guide-body hr { border: none; border-top: 2px solid #e2e8f0; margin: 2rem 0; }
+
+    @media (max-width: 640px) {
+      .guide-container { margin: 1rem; padding: 1.25rem 1rem; border-radius: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="title">🤖 AI Assistant Setup Guide</span>
+  <div class="actions">
+    {% if has_pdf %}
+    <a href="/setup-guide/pdf" class="btn-pdf" target="_blank">⬇ Download PDF</a>
+    {% endif %}
+    <a href="/setup-guide/logout" class="btn-ghost">Sign Out</a>
+  </div>
+</div>
+
+<div class="guide-container">
+  <div class="guide-body">
+    {{ content }}
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>
+  document.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el));
+</script>
+</body>
+</html>

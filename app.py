@@ -1,6 +1,10 @@
 import os
-from flask import Flask, render_template, request, session, redirect, url_for, flash
+import markdown as md_lib
+from flask import Flask, render_template, request, session, redirect, url_for, flash, send_from_directory, Markup
 from auth import login_required, APP_USERNAME, APP_PASSWORD
+
+SETUP_GUIDE_PASSWORD = os.environ.get("SETUP_GUIDE_PASSWORD", "Crap4Days!")
+SETUP_GUIDE_USERNAME = os.environ.get("SETUP_GUIDE_USERNAME", "CarolineJNovak")
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "vtc-assistant-projects-secret-2024")
@@ -57,6 +61,58 @@ def index():
         },
     ]
     return render_template("index.html", projects=projects)
+
+
+def _setup_guide_auth_required(f):
+    """Decorator: require setup-guide–specific login."""
+    from functools import wraps
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if not session.get("setup_guide_auth"):
+            return redirect(url_for("setup_guide_login", next=request.url))
+        return f(*args, **kwargs)
+    return decorated
+
+
+@app.route("/setup-guide/login", methods=["GET", "POST"])
+def setup_guide_login():
+    error = None
+    if request.method == "POST":
+        u = request.form.get("username", "").strip()
+        p = request.form.get("password", "").strip()
+        if u.lower() == SETUP_GUIDE_USERNAME.lower() and p == SETUP_GUIDE_PASSWORD:
+            session["setup_guide_auth"] = True
+            next_url = request.args.get("next") or url_for("setup_guide")
+            return redirect(next_url)
+        error = "Invalid username or password."
+    return render_template("setup_guide_login.html", error=error)
+
+
+@app.route("/setup-guide/logout")
+def setup_guide_logout():
+    session.pop("setup_guide_auth", None)
+    return redirect(url_for("setup_guide_login"))
+
+
+@app.route("/setup-guide")
+@_setup_guide_auth_required
+def setup_guide():
+    guide_path = os.path.join(os.path.dirname(__file__), "SETUP_GUIDE.md")
+    try:
+        with open(guide_path, "r", encoding="utf-8") as f:
+            raw_md = f.read()
+        html_content = Markup(md_lib.markdown(raw_md, extensions=["fenced_code", "tables", "toc"]))
+    except FileNotFoundError:
+        html_content = Markup("<p>Setup guide not found.</p>")
+    has_pdf = os.path.isfile(os.path.join(os.path.dirname(__file__), "AI_Assistant_Setup_Guide.pdf"))
+    return render_template("setup_guide.html", content=html_content, has_pdf=has_pdf)
+
+
+@app.route("/setup-guide/pdf")
+@_setup_guide_auth_required
+def setup_guide_pdf():
+    directory = os.path.dirname(os.path.abspath(__file__))
+    return send_from_directory(directory, "AI_Assistant_Setup_Guide.pdf", as_attachment=False)
 
 
 if __name__ == "__main__":
