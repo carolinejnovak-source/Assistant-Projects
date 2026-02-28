@@ -59,6 +59,12 @@ def index():
             "description": "Compliance workflow management and orchestration tool.",
             "status": "live",
         },
+        {
+            "name": "Mikala Spending",
+            "url": "https://mikala-spending.onrender.com",
+            "description": "Monthly cost tracker for all Mikala-related subscriptions — Render, Hostinger, GitHub, SlyNumber, and Anthropic token spend.",
+            "status": "live",
+        },
     ]
     return render_template("index.html", projects=projects)
 
