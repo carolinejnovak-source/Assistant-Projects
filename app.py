@@ -65,6 +65,12 @@ def index():
             "description": "Monthly cost tracker for all Mikala-related subscriptions — Render, Hostinger, GitHub, SlyNumber, and Anthropic token spend.",
             "status": "live",
         },
+        {
+            "name": "VIP Provider Training Hub",
+            "url": "https://vip-provider-training.onrender.com",
+            "description": "Collaborative medical policy repository and provider training resource hub — built with Friday.",
+            "status": "live",
+        },
     ]
     return render_template("index.html", projects=projects)
 
