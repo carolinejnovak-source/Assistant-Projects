@@ -71,6 +71,12 @@ def index():
             "description": "Collaborative medical policy repository and provider training resource hub — built with Friday.",
             "status": "live",
         },
+        {
+            "name": "Vein Policy Hub",
+            "url": "https://vein-policy-hub-gvvv.onrender.com",
+            "description": "Insurance payer policy database — search by payer, state, plan type, and pre-auth requirements for vein treatments.",
+            "status": "live",
+        },
     ]
     return render_template("index.html", projects=projects)
 
