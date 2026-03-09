@@ -12,6 +12,11 @@
     .project-card { border: none; border-radius: 14px; transition: transform .15s, box-shadow .15s; }
     .project-card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,.1) !important; }
     .status-live { background: #dcfce7; color: #16a34a; font-size: .72rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+    .section-divider { border: none; border-top: 2px solid #e2e8f0; margin: 40px 0 24px; }
+    .section-label { font-size: .7rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; }
+    .section-mine { background: #dbeafe; color: #1d4ed8; }
+    .section-collab { background: #f3e8ff; color: #7c3aed; }
+    .collab-card { border: 2px solid #e9d5ff !important; }
   </style>
 </head>
 <body>
@@ -24,11 +29,16 @@
 </nav>
 
 <div class="container mt-5">
-  <h5 class="fw-bold mb-1">Your Projects</h5>
-  <p class="text-muted small mb-4">VIP Medical Group tools and applications</p>
+
+  <!-- My Projects -->
+  <div class="d-flex align-items-center gap-2 mb-1">
+    <h5 class="fw-bold mb-0">My Projects</h5>
+    <span class="section-label section-mine">Mikala</span>
+  </div>
+  <p class="text-muted small mb-4">VIP Medical Group tools built by Mikala</p>
 
   <div class="row g-4">
-    {% for project in projects %}
+    {% for project in my_projects %}
     <div class="col-md-6 col-lg-4">
       <div class="card project-card shadow-sm h-100">
         <div class="card-body p-4">
@@ -46,16 +56,39 @@
       </div>
     </div>
     {% endfor %}
+  </div>
 
-    {% if not projects %}
-    <div class="col-12">
-      <div class="text-center py-5 text-muted">
-        <i class="fa fa-folder-open fa-3x mb-3 opacity-25"></i>
-        <div>No projects yet.</div>
+  <!-- Collaborations -->
+  {% if collab_projects %}
+  <hr class="section-divider">
+  <div class="d-flex align-items-center gap-2 mb-1">
+    <h5 class="fw-bold mb-0">Collaborations</h5>
+    <span class="section-label section-collab">Mikala &amp; Friday</span>
+  </div>
+  <p class="text-muted small mb-4">Projects built together with Friday &amp; Carly</p>
+
+  <div class="row g-4 mb-5">
+    {% for project in collab_projects %}
+    <div class="col-md-6 col-lg-4">
+      <div class="card project-card collab-card shadow-sm h-100">
+        <div class="card-body p-4">
+          <div class="d-flex align-items-start justify-content-between mb-2">
+            <h6 class="fw-bold mb-0">{{ project.name }}</h6>
+            {% if project.status == 'live' %}
+            <span class="status-live">● LIVE</span>
+            {% endif %}
+          </div>
+          <p class="text-muted small mb-3">{{ project.description }}</p>
+          <a href="{{ project.url }}" target="_blank" class="btn btn-primary btn-sm">
+            <i class="fa fa-external-link-alt me-1"></i>Open
+          </a>
+        </div>
       </div>
     </div>
-    {% endif %}
+    {% endfor %}
   </div>
+  {% endif %}
+
 </div>
 </body>
 </html>

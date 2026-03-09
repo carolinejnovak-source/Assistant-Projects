@@ -1,6 +1,7 @@
 import os
 import markdown as md_lib
-from flask import Flask, render_template, request, session, redirect, url_for, flash, send_from_directory, Markup
+from flask import Flask, render_template, request, session, redirect, url_for, flash, send_from_directory
+from markupsafe import Markup
 from auth import login_required, APP_USERNAME, APP_PASSWORD
 
 SETUP_GUIDE_PASSWORD = os.environ.get("SETUP_GUIDE_PASSWORD", "Crap4Days!")
@@ -34,11 +35,11 @@ def logout():
 @app.route("/")
 @login_required
 def index():
-    projects = [
+    my_projects = [
         {
-            "name": "Clinic Demographics Analyzer",
+            "name": "VIP Site Analyzer",
             "url": "https://mikala.vipmedicalgroup.ai/clinic-demographics/",
-            "description": "Population density, income, insurance coverage, CPT 36475 volume, and Fair Health benchmarks for all clinic locations.",
+            "description": "VIP site analysis tool - evaluate new clinic locations, check drive time overlap, and analyze demographics.",
             "status": "live",
         },
         {
@@ -65,20 +66,22 @@ def index():
             "description": "Monthly cost tracker for all Mikala-related subscriptions — Render, Hostinger, GitHub, SlyNumber, and Anthropic token spend.",
             "status": "live",
         },
+    ]
+    collab_projects = [
         {
             "name": "VIP Provider Training Hub",
-            "url": "https://vip-provider-training.onrender.com",
-            "description": "Collaborative medical policy repository and provider training resource hub — built with Friday.",
+            "url": "https://mikala.vipmedicalgroup.ai/provider-training/",
+            "description": "Provider training resources and clinical documentation hub.",
             "status": "live",
         },
         {
             "name": "Vein Policy Hub",
-            "url": "https://vein-policy-hub-gvvv.onrender.com",
+            "url": "https://mikala.vipmedicalgroup.ai/vein-policy-hub/",
             "description": "Insurance payer policy database — search by payer, state, plan type, and pre-auth requirements for vein treatments.",
             "status": "live",
         },
     ]
-    return render_template("index.html", projects=projects)
+    return render_template("index.html", my_projects=my_projects, collab_projects=collab_projects)
 
 
 def _setup_guide_auth_required(f):
